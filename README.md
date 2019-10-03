@@ -1,0 +1,2 @@
+# biggestIsoscelesTriangle
+Intern Task
