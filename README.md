@@ -1,5 +1,5 @@
-## biggestIsoscelesTriangle
-# Intern Task
+# biggestIsoscelesTriangle
+## Intern Task
 
 Write a program for finding the largest isosceles triangle in area.
 
