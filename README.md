@@ -15,10 +15,11 @@ there are no such triangles.
 
 ## Realization
 
+Returns first triangle with max area.
 Throws IllegalArgumentException if number of arguments less or more than 2.
 Prints "(Warning)Wrong input file name." if input file does not exists. Equals to empty input file.
 Prints "(Error)Unable to create output file. Have no permissions or directory does not exist." if application can't create output file. 
-Returns first triangle with max area.
+
 ## Run instructions
 
 You can run application from application folder.
