@@ -25,7 +25,9 @@ You can run application from application folder.
 Windows
 ```
 gradlew runApp --args="inputFileName outputFileName"
+```
 or
+```
 .\gradlew runApp --args="inputFileName outputFileName"
 ```
 Linux
