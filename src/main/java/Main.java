@@ -14,11 +14,11 @@ public class Main {
             this.y = y;
         }
 
-        public double getX() {
+        double getX() {
             return x;
         }
 
-        public double getY() {
+        double getY() {
             return y;
         }
 
@@ -38,15 +38,10 @@ public class Main {
         }
     }
 
+
     static class IsoscelesTriangle {
         private Point[] points = new Point[3];
         private double area;
-
-        IsoscelesTriangle(Point p1, Point p2, Point p3) {
-            this.points[0] = p1;
-            this.points[1] = p2;
-            this.points[2] = p3;
-        }
 
         IsoscelesTriangle(double[] arr) {
             for (int i = 0; i < points.length; i++) {
@@ -61,6 +56,7 @@ public class Main {
             area = 0.5 * h * l;
         }
 
+
         private void processArea() {
             double l1 = Point.getLen(points[0], points[1]);
             double l2 = Point.getLen(points[0], points[2]);
@@ -71,11 +67,19 @@ public class Main {
                 calculateArea(points[1], points[0], points[2]);
             } else if (l2 == l3) {
                 calculateArea(points[2], points[0], points[1]);
+            } else {
+                area = -1;
             }
 
         }
 
-        public double getArea() {
+        /**
+         * Returns size of area if triangle is isosceles.
+         * Returns -1 if it is not.
+         *
+         * @return -1 if triangle is not isosceles
+         */
+        double getArea() {
             if (area == 0) {
                 processArea();
             }
@@ -88,7 +92,7 @@ public class Main {
         }
     }
 
-    static boolean isDoubleArray(String[] arr) {
+    private static boolean isDoubleArray(String[] arr) {
         for (String s : arr) {
             if (!s.matches("-?\\d+(\\.\\d+)?")) {
                 return false;
@@ -98,32 +102,42 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
+
         if (args.length < 2) {
-            throw new IllegalArgumentException("Missing arguments");
+            throw new IllegalArgumentException("(Error)Missing arguments");
         }
+
         File file = new File(args[0]);
-        Scanner scanner = new Scanner(file);
         IsoscelesTriangle max = null;
+        if (file.exists()) {
+            Scanner scanner = new Scanner(file);
+            while (scanner.hasNext()) {
+                String line = scanner.nextLine();
+                String[] array = line.split(" ");
+                if (array.length == 6 && isDoubleArray(array)) {
+                    IsoscelesTriangle current = new IsoscelesTriangle(
+                            Arrays.stream(array)
+                                    .mapToDouble(Double::parseDouble)
+                                    .toArray()
+                    );
 
-        while (scanner.hasNext()) {
-            String line = scanner.nextLine();
-            String[] array = line.split(" ");
-            if (array.length == 6 && isDoubleArray(array)) {
-                IsoscelesTriangle current = new IsoscelesTriangle(Arrays.stream(array)
-                        .mapToDouble(Double::parseDouble)
-                        .toArray()
-                );
-
-                if (max == null || max.getArea() < current.getArea()) {
-                    max = current;
+                    if ((max == null || max.getArea() < current.getArea()) && current.getArea() > 0) {
+                        max = current;
+                    }
                 }
             }
+            scanner.close();
+        } else {
+            System.out.println("(Warning)Wrong input file name.");
         }
-        scanner.close();
 
         File out = new File(args[1]);
-        FileWriter writer = new FileWriter(out); // overwrites the file
-        writer.write((max == null) ? " " : max.toString());
-        writer.close();
+        try {
+            FileWriter writer = new FileWriter(out);
+            writer.write((max == null) ? " " : max.toString());
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("(Error)Unable to create output file. Have no permissions or directory does not exist.");
+        }
     }
 }
